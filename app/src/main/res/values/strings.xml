@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">My Handbook</string>
+    <string name="ed_title_hint">Title</string>
+    <string name="ed_desc_hint">Description</string>
+</resources>
