@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
 
     private val myDBManager = MyDBManager(this)
-    private val myAdapter = MyAdapter(ArrayList())
+    private val myAdapter = MyAdapter(ArrayList(), this )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,12 +29,12 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun init(){
+    private fun init(){
         binding.rvView.layoutManager =LinearLayoutManager(this)
         binding.rvView.adapter = myAdapter
     }
 
-    fun fillAdapter(){
+    private fun fillAdapter(){
         myAdapter.updateAdapter(myDBManager.readDBData())
     }
 

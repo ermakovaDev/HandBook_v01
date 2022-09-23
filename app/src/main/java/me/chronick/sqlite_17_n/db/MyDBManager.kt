@@ -12,18 +12,18 @@ import me.chronick.sqlite_17_n.db.MyDBNameClass.TABLE_NAME
 import kotlin.collections.ArrayList
 
 
-class MyDBManager (private val context: Context) {
+class MyDBManager(private val context: Context) {
     private val myDbHelper = MyDbHelper(context)
     var db: SQLiteDatabase? = null
 
-    fun openDB(){
+    fun openDB() {
         db = myDbHelper.writableDatabase // открываем БД для записи
     }
 
-    fun insertToDB(title: String, content: String, uri: String){
+    fun insertToDB(title: String, content: String, uri: String) {
         val values = ContentValues().apply {
-            put(COLUMN_NAME_TITLE,title)
-            put(COLUMN_NAME_CONTENT,content)
+            put(COLUMN_NAME_TITLE, title)
+            put(COLUMN_NAME_CONTENT, content)
             put(COLUMN_NAME_IMAGE_URI, uri)
 
         }
@@ -31,21 +31,33 @@ class MyDBManager (private val context: Context) {
     }
 
     @SuppressLint("Range")
-    fun readDBData() : ArrayList<String>{
-        val dataList = ArrayList<String>()
-        val cursor = db?.query(TABLE_NAME,null, null,null,null,null,null,null)
+    fun readDBData(): ArrayList<ListItem> { // ждем при чтении
+        val dataList = ArrayList<ListItem>()
+        val cursor = db?.query(TABLE_NAME, null, null, null, null, null, null, null)
 
-        with(cursor){ // для получения доступа к функциям класса
-            while (this?.moveToNext()!!){
-                val dataText = cursor?.getString(cursor.getColumnIndex(COLUMN_NAME_TITLE))
-                dataList.add(dataText.toString())
+        with(cursor) { // для получения доступа к функциям класса
+            while (this?.moveToNext()!!) {
+                val dataTitle = cursor?.getString(cursor.getColumnIndex(COLUMN_NAME_TITLE))
+                val dataContent = cursor?.getString(cursor.getColumnIndex(COLUMN_NAME_CONTENT))
+                val dataUri = cursor?.getString(cursor.getColumnIndex(COLUMN_NAME_IMAGE_URI))
+                var item = ListItem()
+                if (dataTitle != null) {
+                    item.title = dataTitle
+                }
+                if (dataContent != null) {
+                    item.desc = dataContent
+                }
+                if (dataUri != null) {
+                    item.uri = dataUri
+                }
+                dataList.add(item)
             }
         }
         cursor?.close()
         return dataList
     }
 
-    fun closeDB(){
+    fun closeDB() {
         myDbHelper.close()
     }
 }
