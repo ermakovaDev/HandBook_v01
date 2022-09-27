@@ -3,7 +3,9 @@ package me.chronick.sqlite_17_n
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.SearchView
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,6 +25,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         init()
+        initSearchView()
 
         binding.fabtnAdd.setOnClickListener {
             val i = Intent(this, EditActivity::class.java)
@@ -38,8 +41,23 @@ class MainActivity : AppCompatActivity() {
         binding.rvView.adapter = myAdapter
     }
 
+    private fun initSearchView(){
+     binding.svSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener{  // full search
+         override fun onQueryTextSubmit(p0: String?): Boolean { // function update BD witch Picture
+             return true
+         }
+
+         override fun onQueryTextChange(newText: String?): Boolean {
+             val list = myDBManager.readDBData(newText!!)
+             myAdapter.updateAdapter(list)
+             Log.d("MyLog", "New Text: $newText")
+            return true
+         }
+     })
+    }
+
     private fun fillAdapter() {
-        val list = myDBManager.readDBData()
+        val list = myDBManager.readDBData("")
         myAdapter.updateAdapter(list)
         if (list.size > 0) {
             binding.tvNoElements.visibility = View.GONE
@@ -47,6 +65,8 @@ class MainActivity : AppCompatActivity() {
             binding.tvNoElements.visibility = View.VISIBLE
         }
     }
+
+
 
     private fun getSwapManager(): ItemTouchHelper{
         return ItemTouchHelper(object: ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT){

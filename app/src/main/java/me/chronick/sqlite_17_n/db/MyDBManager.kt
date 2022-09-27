@@ -37,9 +37,10 @@ class MyDBManager(private val context: Context) {
     }
 
     @SuppressLint("Range")
-    fun readDBData(): ArrayList<ListItem> { // ждем при чтении
+    fun readDBData(searchText : String): ArrayList<ListItem> { // ждем при чтении
         val dataList = ArrayList<ListItem>()
-        val cursor = db?.query(TABLE_NAME, null, null, null, null, null, null, null)
+        val selection = "$COLUMN_NAME_TITLE LIKE ?"
+        val cursor = db?.query(TABLE_NAME, null, selection, arrayOf("%$searchText%"), null, null, null, null)
 
         with(cursor) { // для получения доступа к функциям класса
             while (this?.moveToNext()!!) {
