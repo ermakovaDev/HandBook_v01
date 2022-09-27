@@ -1,4 +1,4 @@
 ## HandBook
-Learn project
+*Learn project
 ----
 A simple list of notes
