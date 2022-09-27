@@ -39,8 +39,6 @@ class EditActivity : AppCompatActivity() {
         binding.ibtnEditImage.setOnClickListener {
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT) // постоянная ссылка
             intent.type = "image/*"
-            intent.flags =
-                Intent.FLAG_GRANT_READ_URI_PERMISSION // разрешение на чтение ссылки - не будет временной
             startActivityForResult(intent, imageRequestCode)
         }
 
@@ -60,6 +58,7 @@ class EditActivity : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK && requestCode == imageRequestCode) {
             binding.ivPicture.setImageURI(data?.data)
             tempImageUri = data?.data.toString()
+            contentResolver.takePersistableUriPermission(data?.data!!, Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
     }
 

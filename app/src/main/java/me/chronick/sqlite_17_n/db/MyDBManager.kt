@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import android.provider.BaseColumns
 import me.chronick.sqlite_17_n.db.MyDBNameClass.COLUMN_NAME_CONTENT
 import me.chronick.sqlite_17_n.db.MyDBNameClass.COLUMN_NAME_IMAGE_URI
 import me.chronick.sqlite_17_n.db.MyDBNameClass.COLUMN_NAME_TITLE
@@ -30,6 +31,11 @@ class MyDBManager(private val context: Context) {
         db?.insert(TABLE_NAME, null, values)
     }
 
+    fun removeItemFromDB(id: String) {
+        val selectItemID = BaseColumns._ID + "=$id"
+        db?.delete(TABLE_NAME, selectItemID, null)
+    }
+
     @SuppressLint("Range")
     fun readDBData(): ArrayList<ListItem> { // ждем при чтении
         val dataList = ArrayList<ListItem>()
@@ -37,10 +43,14 @@ class MyDBManager(private val context: Context) {
 
         with(cursor) { // для получения доступа к функциям класса
             while (this?.moveToNext()!!) {
+                val dataId = cursor?.getInt(cursor.getColumnIndex(BaseColumns._ID))
                 val dataTitle = cursor?.getString(cursor.getColumnIndex(COLUMN_NAME_TITLE))
                 val dataContent = cursor?.getString(cursor.getColumnIndex(COLUMN_NAME_CONTENT))
                 val dataUri = cursor?.getString(cursor.getColumnIndex(COLUMN_NAME_IMAGE_URI))
                 val item = ListItem()
+                if (dataId != null) {
+                    item.id = dataId
+                }
                 if (dataTitle != null) {
                     item.title = dataTitle
                 }

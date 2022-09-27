@@ -4,7 +4,9 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import me.chronick.sqlite_17_n.databinding.ActivityMainBinding
 import me.chronick.sqlite_17_n.db.MyAdapter
 import me.chronick.sqlite_17_n.db.MyDBManager
@@ -31,6 +33,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun init() {
         binding.rvView.layoutManager = LinearLayoutManager(this)
+        val swapHelper = getSwapManager()
+        swapHelper.attachToRecyclerView(binding.rvView)
         binding.rvView.adapter = myAdapter
     }
 
@@ -42,6 +46,23 @@ class MainActivity : AppCompatActivity() {
         } else {
             binding.tvNoElements.visibility = View.VISIBLE
         }
+    }
+
+    private fun getSwapManager(): ItemTouchHelper{
+        return ItemTouchHelper(object: ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT){
+            override fun onMove( // передвижение
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) { // свайп , получает ViewHolder по каждой позиции
+                myAdapter.removeItem(viewHolder.adapterPosition, myDBManager)
+
+            }
+        })
     }
 
 

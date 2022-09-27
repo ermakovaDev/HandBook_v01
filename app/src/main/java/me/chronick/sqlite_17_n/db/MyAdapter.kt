@@ -53,4 +53,12 @@ class MyAdapter(listMy: ArrayList<ListItem>, mainContext: Context) : RecyclerVie
         listArray.addAll(listItems)
         notifyDataSetChanged()
     }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun removeItem(position: Int, dbManager : MyDBManager){
+        dbManager.removeItemFromDB(listArray[position].id.toString())
+        listArray.removeAt(position)
+        notifyItemRangeChanged(0,listArray.size) // delete position and update
+        notifyItemRemoved(position) // what Item delete
+    }
 }
