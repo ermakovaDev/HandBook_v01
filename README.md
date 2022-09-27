@@ -1,4 +1,4 @@
 ## HandBook
-* My first autumn 2022 project.
+Learn project
 ----
-A simple list of notes with an insert
+A simple list of notes
