@@ -22,13 +22,14 @@
         android:paddingTop="10dp"
         android:paddingRight="10dp"
         android:paddingBottom="10dp"
+        android:textColor="@color/edit_text_green_dark"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/clMyImageLayout" />
 
     <EditText
-        android:id="@+id/etContent"
+        android:id="@+id/etDescription"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
@@ -43,6 +44,7 @@
         android:paddingBottom="10dp"
         android:scrollbarSize="10dp"
         android:scrollbars="vertical"
+        android:textColor="@color/edit_text_green_dark"
         android:textSize="20sp"
         android:verticalScrollbarPosition="right"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -74,6 +76,18 @@
         app:layout_constraintBottom_toTopOf="@+id/fabtnSave"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@android:drawable/ic_menu_gallery" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabtnEditItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:alpha="0.5"
+        android:clickable="true"
+        app:layout_constraintBottom_toTopOf="@+id/fabtnAddImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_edit" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clMyImageLayout"
@@ -122,4 +136,5 @@
             app:layout_constraintTop_toBottomOf="@+id/ibtnEditImage"
             app:srcCompat="@android:drawable/ic_menu_delete" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

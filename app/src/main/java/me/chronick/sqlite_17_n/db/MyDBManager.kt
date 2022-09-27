@@ -36,11 +36,22 @@ class MyDBManager(private val context: Context) {
         db?.delete(TABLE_NAME, selectItemID, null)
     }
 
+    fun updateItemFromDB(id: Int, title: String, content: String, uri: String) {
+        val selectItemID = BaseColumns._ID + "=$id"
+        val values = ContentValues().apply {
+            put(COLUMN_NAME_TITLE, title)
+            put(COLUMN_NAME_CONTENT, content)
+            put(COLUMN_NAME_IMAGE_URI, uri)
+        }
+        db?.update(TABLE_NAME, values, selectItemID, null)
+    }
+
     @SuppressLint("Range")
-    fun readDBData(searchText : String): ArrayList<ListItem> { // ждем при чтении
+    fun readDBData(searchText: String): ArrayList<ListItem> { // ждем при чтении
         val dataList = ArrayList<ListItem>()
         val selection = "$COLUMN_NAME_TITLE LIKE ?"
-        val cursor = db?.query(TABLE_NAME, null, selection, arrayOf("%$searchText%"), null, null, null, null)
+        val cursor =
+            db?.query(TABLE_NAME, null, selection, arrayOf("%$searchText%"), null, null, null, null)
 
         with(cursor) { // для получения доступа к функциям класса
             while (this?.moveToNext()!!) {

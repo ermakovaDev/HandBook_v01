@@ -23,11 +23,11 @@ class MyAdapter(listMy: ArrayList<ListItem>, mainContext: Context) : RecyclerVie
             tvTitle.text=item.title
             itemView.setOnClickListener{
                 val intent = Intent(context, EditActivity::class.java).apply {  // откуда куда
+                    putExtra(MyIntentConstants.INTENT_ID_KEY, item.id)
                     putExtra(MyIntentConstants.INTENT_TITLE_KEY, item.title)
                     putExtra(MyIntentConstants.INTENT_DESC_KEY, item.desc)
                     putExtra(MyIntentConstants.INTENT_URI_KEY, item.uri)
                 }
-
                 context.startActivity(intent) // что хотим запустить и что передаем в активити
             }
         }
