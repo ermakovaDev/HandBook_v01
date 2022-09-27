@@ -40,7 +40,7 @@ class MyDBManager(private val context: Context) {
                 val dataTitle = cursor?.getString(cursor.getColumnIndex(COLUMN_NAME_TITLE))
                 val dataContent = cursor?.getString(cursor.getColumnIndex(COLUMN_NAME_CONTENT))
                 val dataUri = cursor?.getString(cursor.getColumnIndex(COLUMN_NAME_IMAGE_URI))
-                var item = ListItem()
+                val item = ListItem()
                 if (dataTitle != null) {
                     item.title = dataTitle
                 }

@@ -17,7 +17,7 @@ class MyAdapter(listMy: ArrayList<ListItem>, mainContext: Context) : RecyclerVie
 
     class MyHolder(itemView: View, vHContext: Context) : RecyclerView.ViewHolder(itemView) {
         private val tvTitle:TextView = itemView.findViewById(R.id.tvTitle)
-        val context = vHContext
+        private val context = vHContext
 
         fun setData(item: ListItem){
             tvTitle.text=item.title
