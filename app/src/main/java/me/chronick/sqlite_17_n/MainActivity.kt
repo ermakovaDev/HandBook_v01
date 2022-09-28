@@ -3,19 +3,21 @@ package me.chronick.sqlite_17_n
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.SearchView
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import me.chronick.sqlite_17_n.databinding.ActivityMainBinding
 import me.chronick.sqlite_17_n.db.MyAdapter
 import me.chronick.sqlite_17_n.db.MyDBManager
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
 
     private val myDBManager = MyDBManager(this)
     private val myAdapter = MyAdapter(ArrayList(), this)
@@ -41,35 +43,38 @@ class MainActivity : AppCompatActivity() {
         binding.rvView.adapter = myAdapter
     }
 
-    private fun initSearchView(){
-     binding.svSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener{  // full search
-         override fun onQueryTextSubmit(p0: String?): Boolean { // function update BD witch Picture
-             return true
-         }
+    private fun initSearchView() {
+        binding.svSearch.setOnQueryTextListener(object :
+            SearchView.OnQueryTextListener {  // full search
+            override fun onQueryTextSubmit(query: String?): Boolean { // function update BD witch Picture
+                return true
+            }
 
-         override fun onQueryTextChange(newText: String?): Boolean {
-             val list = myDBManager.readDBData(newText!!)
-             myAdapter.updateAdapter(list)
-             Log.d("MyLog", "New Text: $newText")
-            return true
-         }
-     })
+            override fun onQueryTextChange(newText: String?): Boolean {
+                fillAdapter(newText!!)
+                return true
+            }
+        })
     }
 
-    private fun fillAdapter() {
-        val list = myDBManager.readDBData("")
-        myAdapter.updateAdapter(list)
-        if (list.size > 0) {
-            binding.tvNoElements.visibility = View.GONE
-        } else {
-            binding.tvNoElements.visibility = View.VISIBLE
+    private fun fillAdapter(text: String) {
+
+        CoroutineScope(Dispatchers.Main).launch { // thread MAIN
+            val list = myDBManager.readDBData(text)
+            myAdapter.updateAdapter(list)
+            if (list.size > 0) {
+                binding.tvNoElements.visibility = View.GONE
+            } else {
+                binding.tvNoElements.visibility = View.VISIBLE
+            }
         }
+
     }
 
 
-
-    private fun getSwapManager(): ItemTouchHelper{
-        return ItemTouchHelper(object: ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT){
+    private fun getSwapManager(): ItemTouchHelper {
+        return ItemTouchHelper(object :
+            ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT) {
             override fun onMove( // передвижение
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
@@ -78,7 +83,10 @@ class MainActivity : AppCompatActivity() {
                 return false
             }
 
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) { // свайп , получает ViewHolder по каждой позиции
+            override fun onSwiped(
+                viewHolder: RecyclerView.ViewHolder,
+                direction: Int
+            ) { // свайп , получает ViewHolder по каждой позиции
                 myAdapter.removeItem(viewHolder.adapterPosition, myDBManager)
 
             }
@@ -89,7 +97,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         myDBManager.openDB()
-        fillAdapter()
+        fillAdapter("")
     }
 
     override fun onDestroy() {

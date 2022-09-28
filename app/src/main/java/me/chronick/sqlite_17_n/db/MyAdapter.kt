@@ -13,7 +13,7 @@ import me.chronick.sqlite_17_n.R
 
 class MyAdapter(listMy: ArrayList<ListItem>, mainContext: Context) : RecyclerView.Adapter<MyAdapter.MyHolder>(){
     private var listArray =listMy
-    var context = mainContext
+    private var context = mainContext
 
     class MyHolder(itemView: View, vHContext: Context) : RecyclerView.ViewHolder(itemView) {
         private val tvTitle:TextView = itemView.findViewById(R.id.tvTitle)
@@ -45,7 +45,7 @@ class MyAdapter(listMy: ArrayList<ListItem>, mainContext: Context) : RecyclerVie
     }
 
     override fun onBindViewHolder(holder: MyHolder, position: Int){
-        // заполняется шаблон. передаем holder и itemcount для заполнения шаблона (данные массива к шаблону для рисования), отрисовывается каждый раз новая позиция
+        // заполняется шаблон. передаем holder и item count для заполнения шаблона (данные массива к шаблону для рисования), отрисовывается каждый раз новая позиция
         holder.setData(listArray[position])
     }
 

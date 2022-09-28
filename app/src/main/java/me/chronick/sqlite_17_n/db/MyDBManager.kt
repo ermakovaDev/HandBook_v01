@@ -6,6 +6,8 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.provider.BaseColumns
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import me.chronick.sqlite_17_n.db.MyDBNameClass.COLUMN_NAME_CONTENT
 import me.chronick.sqlite_17_n.db.MyDBNameClass.COLUMN_NAME_IMAGE_URI
 import me.chronick.sqlite_17_n.db.MyDBNameClass.COLUMN_NAME_TIME
@@ -14,9 +16,9 @@ import me.chronick.sqlite_17_n.db.MyDBNameClass.TABLE_NAME
 import kotlin.collections.ArrayList
 
 
-class MyDBManager(private val context: Context) {
+class MyDBManager(context: Context) {
     private val myDbHelper = MyDbHelper(context)
-    var db: SQLiteDatabase? = null
+    private var db: SQLiteDatabase? = null
 
     fun openDB() {
         db = myDbHelper.writableDatabase // открываем БД для записи
@@ -49,7 +51,7 @@ class MyDBManager(private val context: Context) {
     }
 
     @SuppressLint("Range")
-    fun readDBData(searchText: String): ArrayList<ListItem> { // ждем при чтении
+    suspend fun readDBData(searchText: String): ArrayList<ListItem> = withContext(Dispatchers.IO) { // waiting for reading, start fun in thread IO (input/output), block Coroutine
         val dataList = ArrayList<ListItem>()
         val selection = "$COLUMN_NAME_TITLE LIKE ?"
         val cursor =
@@ -82,7 +84,7 @@ class MyDBManager(private val context: Context) {
             }
         }
         cursor?.close()
-        return dataList
+        return@withContext dataList
     }
 
     fun closeDB() {

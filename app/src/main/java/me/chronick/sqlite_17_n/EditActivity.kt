@@ -7,9 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.ImageView
-import androidx.activity.result.contract.ActivityResultContracts
-import me.chronick.sqlite_17_n.databinding.ActivityMainBinding
 import me.chronick.sqlite_17_n.databinding.EditActivityBinding
 import me.chronick.sqlite_17_n.db.MyDBManager
 import me.chronick.sqlite_17_n.db.MyIntentConstants
@@ -18,11 +15,11 @@ import java.util.*
 
 class EditActivity : AppCompatActivity() {
     private val imageRequestCode = 10
-    var tempImageUri = "empty"
-    var idItem = 0
-    var isEditState = false
+    private var tempImageUri = "empty"
+    private var idItem = 0
+    private var isEditState = false
     private val myDBManager = MyDBManager(this)
-    lateinit var binding: EditActivityBinding
+    private lateinit var binding: EditActivityBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
