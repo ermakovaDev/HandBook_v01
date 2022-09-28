@@ -3,22 +3,18 @@ plugins {
     id 'org.jetbrains.kotlin.android'
 }
 
-
-
-
-
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "me.chronick.sqlite_17_n"
         minSdk 26
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-      //  android.defaultConfig.VectorDrawables.useSupportLibrary = true //support for appDraw app:srcCompat ="@drawable/ic_add"
+        //  android.defaultConfig.VectorDrawables.useSupportLibrary = true //support for appDraw app:srcCompat ="@drawable/ic_add"
     }
 
     buildTypes {
@@ -35,7 +31,7 @@ android {
         jvmTarget = '1.8'
     }
 
-    buildFeatures{
+    buildFeatures {
         viewBinding true
     }
     defaultConfig {
