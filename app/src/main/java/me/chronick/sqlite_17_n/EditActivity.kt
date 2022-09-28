@@ -36,6 +36,7 @@ class EditActivity : AppCompatActivity() {
         binding.ibtnDeleteImage.setOnClickListener {
             binding.clMyImageLayout.visibility = View.GONE
             binding.fabtnAddImage.visibility = View.VISIBLE
+            tempImageUri = "empty"
         }
 
         binding.ibtnEditImage.setOnClickListener {
@@ -59,7 +60,12 @@ class EditActivity : AppCompatActivity() {
         binding.fabtnEditItem.setOnClickListener{
             binding.etTitle.isEnabled = true
             binding.etDescription.isEnabled = true
-            binding.fabtnEditItem.visibility= View.GONE
+            binding.fabtnEditItem.visibility=View.GONE
+            binding.fabtnAddImage.visibility = View.VISIBLE
+            if (tempImageUri == "empty") return@setOnClickListener
+            binding.ibtnEditImage.visibility= View.VISIBLE
+            binding.ibtnDeleteImage.visibility =View.VISIBLE
+
         }
     }
 
@@ -108,13 +114,8 @@ class EditActivity : AppCompatActivity() {
 
                 if (intentToDo.getStringExtra(MyIntentConstants.INTENT_URI_KEY) != "empty") {
                     binding.clMyImageLayout.visibility = View.VISIBLE
-                    binding.ivPicture.setImageURI(
-                        Uri.parse(
-                            intentToDo.getStringExtra(
-                                MyIntentConstants.INTENT_URI_KEY
-                            )
-                        )
-                    )
+                    tempImageUri =  intentToDo.getStringExtra(MyIntentConstants.INTENT_URI_KEY)!!
+                    binding.ivPicture.setImageURI(Uri.parse(tempImageUri))
                     binding.ibtnDeleteImage.visibility = View.GONE
                     binding.ibtnEditImage.visibility = View.GONE
                 }
