@@ -13,6 +13,8 @@ import me.chronick.sqlite_17_n.databinding.ActivityMainBinding
 import me.chronick.sqlite_17_n.databinding.EditActivityBinding
 import me.chronick.sqlite_17_n.db.MyDBManager
 import me.chronick.sqlite_17_n.db.MyIntentConstants
+import java.text.SimpleDateFormat
+import java.util.*
 
 class EditActivity : AppCompatActivity() {
     private val imageRequestCode = 10
@@ -50,9 +52,9 @@ class EditActivity : AppCompatActivity() {
             val myDesc = binding.etDescription.text.toString()
             if (myTitle != "" && myDesc != "") {
                 if (isEditState) {
-                    myDBManager.updateItemFromDB(idItem, myTitle, myDesc, tempImageUri)
+                    myDBManager.updateItemFromDB(idItem, myTitle, myDesc, tempImageUri, getCurrentTime())
                 } else
-                    myDBManager.insertToDB(myTitle, myDesc, tempImageUri)
+                    myDBManager.insertToDB(myTitle, myDesc, tempImageUri, getCurrentTime())
                 finish()
             }
         }
@@ -80,16 +82,6 @@ class EditActivity : AppCompatActivity() {
                 Intent.FLAG_GRANT_READ_URI_PERMISSION
             )
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        myDBManager.openDB()
-    }
-
-    override fun onDestroy() {
-        myDBManager.closeDB()
-        super.onDestroy()
     }
 
     private fun getMyIntents() { // ++Intent
@@ -123,4 +115,19 @@ class EditActivity : AppCompatActivity() {
         }
     }
 
+    private fun getCurrentTime(): String {
+        val time = Calendar.getInstance().time
+        val formatter = SimpleDateFormat("dd.MM.yy kk:mm", Locale.getDefault())
+        return formatter.format(time)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        myDBManager.openDB()
+    }
+
+    override fun onDestroy() {
+        myDBManager.closeDB()
+        super.onDestroy()
+    }
 }

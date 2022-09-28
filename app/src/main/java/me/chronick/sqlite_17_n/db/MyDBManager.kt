@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.provider.BaseColumns
 import me.chronick.sqlite_17_n.db.MyDBNameClass.COLUMN_NAME_CONTENT
 import me.chronick.sqlite_17_n.db.MyDBNameClass.COLUMN_NAME_IMAGE_URI
+import me.chronick.sqlite_17_n.db.MyDBNameClass.COLUMN_NAME_TIME
 import me.chronick.sqlite_17_n.db.MyDBNameClass.COLUMN_NAME_TITLE
 import me.chronick.sqlite_17_n.db.MyDBNameClass.TABLE_NAME
 import kotlin.collections.ArrayList
@@ -21,12 +22,12 @@ class MyDBManager(private val context: Context) {
         db = myDbHelper.writableDatabase // открываем БД для записи
     }
 
-    fun insertToDB(title: String, content: String, uri: String) {
+    fun insertToDB(title: String, content: String, uri: String, time: String) {
         val values = ContentValues().apply {
             put(COLUMN_NAME_TITLE, title)
             put(COLUMN_NAME_CONTENT, content)
             put(COLUMN_NAME_IMAGE_URI, uri)
-
+            put(COLUMN_NAME_TIME, time)
         }
         db?.insert(TABLE_NAME, null, values)
     }
@@ -36,12 +37,13 @@ class MyDBManager(private val context: Context) {
         db?.delete(TABLE_NAME, selectItemID, null)
     }
 
-    fun updateItemFromDB(id: Int, title: String, content: String, uri: String) {
+    fun updateItemFromDB(id: Int, title: String, content: String, uri: String, time: String) {
         val selectItemID = BaseColumns._ID + "=$id"
         val values = ContentValues().apply {
             put(COLUMN_NAME_TITLE, title)
             put(COLUMN_NAME_CONTENT, content)
             put(COLUMN_NAME_IMAGE_URI, uri)
+            put(COLUMN_NAME_TIME, time)
         }
         db?.update(TABLE_NAME, values, selectItemID, null)
     }
@@ -59,6 +61,7 @@ class MyDBManager(private val context: Context) {
                 val dataTitle = cursor?.getString(cursor.getColumnIndex(COLUMN_NAME_TITLE))
                 val dataContent = cursor?.getString(cursor.getColumnIndex(COLUMN_NAME_CONTENT))
                 val dataUri = cursor?.getString(cursor.getColumnIndex(COLUMN_NAME_IMAGE_URI))
+                val dataTime = cursor?.getString(cursor.getColumnIndex(COLUMN_NAME_TIME))
                 val item = ListItem()
                 if (dataId != null) {
                     item.id = dataId
@@ -71,6 +74,9 @@ class MyDBManager(private val context: Context) {
                 }
                 if (dataUri != null) {
                     item.uri = dataUri
+                }
+                if (dataTime != null) {
+                    item.time = dataTime
                 }
                 dataList.add(item)
             }

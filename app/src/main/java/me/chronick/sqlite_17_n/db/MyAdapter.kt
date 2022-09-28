@@ -17,10 +17,12 @@ class MyAdapter(listMy: ArrayList<ListItem>, mainContext: Context) : RecyclerVie
 
     class MyHolder(itemView: View, vHContext: Context) : RecyclerView.ViewHolder(itemView) {
         private val tvTitle:TextView = itemView.findViewById(R.id.tvTitle)
+        private val tvTimeItem:TextView = itemView.findViewById(R.id.tvTimeItem)
         private val context = vHContext
 
         fun setData(item: ListItem){
             tvTitle.text=item.title
+            tvTimeItem.text =item.time
             itemView.setOnClickListener{
                 val intent = Intent(context, EditActivity::class.java).apply {  // откуда куда
                     putExtra(MyIntentConstants.INTENT_ID_KEY, item.id)
