@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import me.chronick.sqlite_17_n.databinding.ActivityMainBinding
 import me.chronick.sqlite_17_n.db.MyAdapter
@@ -21,6 +22,7 @@ class MainActivity : AppCompatActivity() {
 
     private val myDBManager = MyDBManager(this)
     private val myAdapter = MyAdapter(ArrayList(), this)
+    private var job: Job? = null // Coroutine stop
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +61,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun fillAdapter(text: String) {
 
-        CoroutineScope(Dispatchers.Main).launch { // thread MAIN
+        job?.cancel() // null or not null
+
+        job = CoroutineScope(Dispatchers.Main).launch { // thread MAIN
             val list = myDBManager.readDBData(text)
             myAdapter.updateAdapter(list)
             if (list.size > 0) {

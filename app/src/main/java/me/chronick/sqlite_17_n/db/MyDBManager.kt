@@ -24,7 +24,7 @@ class MyDBManager(context: Context) {
         db = myDbHelper.writableDatabase // открываем БД для записи
     }
 
-    fun insertToDB(title: String, content: String, uri: String, time: String) {
+   suspend fun insertToDB(title: String, content: String, uri: String, time: String) = withContext(Dispatchers.IO) {
         val values = ContentValues().apply {
             put(COLUMN_NAME_TITLE, title)
             put(COLUMN_NAME_CONTENT, content)
@@ -39,7 +39,7 @@ class MyDBManager(context: Context) {
         db?.delete(TABLE_NAME, selectItemID, null)
     }
 
-    fun updateItemFromDB(id: Int, title: String, content: String, uri: String, time: String) {
+   suspend fun updateItemFromDB(id: Int, title: String, content: String, uri: String, time: String) = withContext(Dispatchers.IO) {
         val selectItemID = BaseColumns._ID + "=$id"
         val values = ContentValues().apply {
             put(COLUMN_NAME_TITLE, title)
